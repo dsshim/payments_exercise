@@ -13,7 +13,13 @@ RSpec.describe Payment, type: :model do
       expect(payment.errors.full_messages.first).to eq("Payment amount must not exceed balance")
     end
 
-    
+    it "verifies outstanding balance is greater than zero" do
+      payment = new_payment(1000.50)
+      payment.check_balance
+      payment.save
+
+      expect(payment.payment_amount).to eq(1000.50)
+    end
   end
 
   describe Payment, "#update_loan" do

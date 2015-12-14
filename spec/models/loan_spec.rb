@@ -21,7 +21,32 @@ RSpec.describe Loan, type: :model do
     end
   end
 
-  
+  describe Loan, "#update_loan_after_payment" do
+    it "updates the outstanding loan balance on payment" do
+      create_payment(500.25)
+      @loan.update_loan_after_payment
+
+      expect(@loan.outstanding_balance).to eq(9500.00)
+
+      create_payment(1000.00)
+      @loan.update_loan_after_payment
+
+      expect(@loan.outstanding_balance).to eq(8500.00)
+    end
+
+    it "updates the total payments" do
+      create_payment(3000.00)
+
+      @loan.update_loan_after_payment
+
+      expect(@loan.total_payments).to eq(3000.00)
+
+      create_payment(1000.25)
+      @loan.update_loan_after_payment
+
+      expect(@loan.total_payments).to eq(4000.25)
+    end
+  end
 
   private
 
